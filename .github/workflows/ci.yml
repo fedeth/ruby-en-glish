@@ -35,6 +35,18 @@ jobs:
           bundle install --jobs 4 --retry 3
           bundle exec rails db:prepare
           bundle exec rails spec
+  # https://github.com/AkhileshNS/heroku-deploy
+  deploy:
+    runs-on: ubuntu-18.04
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL_ADDRESS}}
+
       
 
 
