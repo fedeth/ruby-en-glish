@@ -1,5 +1,9 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 jobs:
   test:
     runs-on: ubuntu-18.04
@@ -37,6 +41,7 @@ jobs:
           bundle exec rails spec
   # https://github.com/AkhileshNS/heroku-deploy
   deploy:
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-18.04
     needs: test
     steps:
