@@ -46,6 +46,9 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
           heroku_email: ${{secrets.HEROKU_EMAIL_ADDRESS}}
+          healthcheck: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com/healthcheck"
+          checkstring: "OK"
+          delay: 10
 
       
 
