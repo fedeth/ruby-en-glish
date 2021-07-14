@@ -1,0 +1,6 @@
+AllCops:
+  Exclude:
+    - 'spec/**/*'
+    - 'db/**/*'
+Style/IfUnlessModifier:
+  Enabled: false
