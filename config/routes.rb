@@ -4,4 +4,5 @@ Rails.application.routes.draw do
 
   get 'test_logged_user', to: 'test#test_logged_user'
   get 'test_logged_user_bis', to: 'test#test_logged_user_bis'
+  get 'healthcheck', to: 'application#healthcheck'
 end
