@@ -1,24 +1,7 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A RoR API app with rolling JWT authentication.
 
-Things you may want to cover:
+The idea behind this app is to develop a flash-card game application to expand my English vocabulary using the SuperMEMO algorithm.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[Supermemo](https://www.supermemo.com/en/archives1990-2015/english/ol/sm2)

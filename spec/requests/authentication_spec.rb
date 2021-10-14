@@ -4,8 +4,8 @@ include ActionController::RespondWith
 
 JSON_HEADERS = { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
 
-describe "Authentication flow", type: :request do
-  context "user" do  
+describe "In the authentication flow", type: :request do
+  context "a new user" do  
     
     before(:all) do
       
@@ -29,11 +29,11 @@ describe "Authentication flow", type: :request do
       @confirmation_params = CGI::parse(uri.query)
     end
 
-    it "performs a sign-up" do
+    it "should register a new account succesfully" do
       expect(@registration_response).to have_http_status(200)
     end
 
-    it "performs a sign-in before confirmation" do
+    it "should fail to sing-in before email confirmation" do
       post('http://localhost:3000/auth/sign_in',
         params: {
           email: "test@test.example",
@@ -44,7 +44,7 @@ describe "Authentication flow", type: :request do
       expect(response).to have_http_status(401)
     end
 
-    it "confirms email link and retry a sign-in" do
+    it "should log in after email confirmation" do
       get("http://localhost:3000/auth/confirmation",
         params: {
           config: @confirmation_params["config"][0],
@@ -64,14 +64,7 @@ describe "Authentication flow", type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it "can't access to private methods" do
-      get('http://localhost:3000/test_logged_user',
-        headers: JSON_HEADERS
-      )
-      expect(response).to have_http_status(401)
-    end
-
-    it "can access to private methods" do
+    it "should access to private contents" do
       login()
       auth_params = get_auth_params_from_login_response_headers(response)
       get('http://localhost:3000/test_logged_user',
@@ -84,33 +77,43 @@ describe "Authentication flow", type: :request do
       )
       expect(response).to have_http_status(200)
     end
+  end
 
-    def login
-      post('http://localhost:3000/auth/sign_in',
-        params:  { email: "created_user@test.example", password: 'xxxxxxxxx' }.to_json,
+  context "an unauthenticated user" do  
+
+    it "shouldn't access to private contents" do
+      get('http://localhost:3000/test_logged_user',
         headers: JSON_HEADERS
       )
+      expect(response).to have_http_status(401)
     end
-  
-    def get_auth_params_from_login_response_headers(response)
-      client = response.headers['client']
-      token = response.headers['access-token']
-      expiry = response.headers['expiry']
-      token_type = response.headers['token-type']
-      uid = response.headers['uid']
-  
-      auth_params = {
-        'access-token' => token,
-        'client' => client,
-        'uid' => uid,
-        'expiry' => expiry,
-        'token-type' => token_type
-      }
-      auth_params
-    end
+  end
 
-    after(:all) do
-      User.destroy_all
-    end
+  def login
+    post('http://localhost:3000/auth/sign_in',
+      params:  { email: "created_user@test.example", password: 'xxxxxxxxx' }.to_json,
+      headers: JSON_HEADERS
+    )
+  end
+
+  def get_auth_params_from_login_response_headers(response)
+    client = response.headers['client']
+    token = response.headers['access-token']
+    expiry = response.headers['expiry']
+    token_type = response.headers['token-type']
+    uid = response.headers['uid']
+
+    auth_params = {
+      'access-token' => token,
+      'client' => client,
+      'uid' => uid,
+      'expiry' => expiry,
+      'token-type' => token_type
+    }
+    auth_params
+  end
+
+  after(:all) do
+    User.destroy_all
   end
 end
